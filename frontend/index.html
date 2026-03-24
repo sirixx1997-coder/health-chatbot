@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Health AI</title>
+
+<style>
+body {
+    margin:0;
+    font-family:Segoe UI;
+    background:linear-gradient(135deg,#0f172a,#1e293b);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    color:white;
+}
+
+.container {
+    width:420px;
+    background:#111827;
+    border-radius:15px;
+    box-shadow:0 0 30px black;
+}
+
+.header {
+    padding:15px;
+    background:#1e293b;
+    font-weight:bold;
+}
+
+.chat {
+    height:400px;
+    overflow-y:auto;
+    padding:10px;
+}
+
+.user {text-align:right;color:#38bdf8;}
+.bot {text-align:left;color:#22c55e;}
+
+.input-box {
+    display:flex;
+    padding:10px;
+    background:#1e293b;
+}
+
+input {
+    flex:1;
+    padding:10px;
+    border:none;
+    border-radius:10px;
+}
+
+button {
+    margin-left:5px;
+    padding:10px;
+    border:none;
+    border-radius:10px;
+    background:#38bdf8;
+    cursor:pointer;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+<div class="header"> Health Assistant</div>
+
+<div id="chat" class="chat"></div>
+
+<div class="input-box">
+<input id="msg" placeholder="Type or speak...">
+<button onclick="send()">Send</button>
+<button onclick="voice()">🎤</button>
+</div>
+
+</div>
+
+<script>
+
+async function send(){
+    let input=document.getElementById("msg");
+    let msg=input.value;
+
+    let chat=document.getElementById("chat");
+    chat.innerHTML+=`<div class='user'>${msg}</div>`;
+
+    let res=await fetch("http://127.0.0.1:5000/chat",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({message:msg})
+    });
+
+    let data=await res.json();
+    chat.innerHTML+=`<div class='bot'>${data.response}</div>`;
+
+    input.value="";
+    chat.scrollTop=chat.scrollHeight;
+}
+
+// 🎤 VOICE INPUT
+function voice(){
+    let recognition=new webkitSpeechRecognition();
+    recognition.lang="en-IN";
+
+    recognition.onresult=function(event){
+        document.getElementById("msg").value=event.results[0][0].transcript;
+    };
+
+    recognition.start();
+}
+
+</script>
+
+</body>
+</html>

@@ -95,7 +95,10 @@ def get_health_response(msg):
         return "Please explain symptoms clearly."
 
 # ---------------- ROUTES ---------------- #
-
+@app.route('/')
+def home():
+    return "Health AI Chatbot is running 🚀"
+    
 @app.route('/chat', methods=['POST'])
 def chat():
     data = request.json

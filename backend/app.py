@@ -125,9 +125,6 @@ def admin():
     return jsonify(data)
 
 # ---------------- RUN ---------------- #
-
-if __name__ == '__main__':
-    print("🔥 FINAL AI CHATBOT RUNNING")
 import os
 
 if __name__ == '__main__':
